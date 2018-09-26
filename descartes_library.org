@@ -1,0 +1,39 @@
+* Descartes: ROS motion planning library for semi-constrained Cartesian trajectories (from SWRI)
+** Motivation
+   1. Offline robot programming software vs. Teach pendent
+   2. Typical pick & place application is a point-to-point motion planning pipeline for articulated mulit-body
+   3. Semi-constrained :: constrained path - a path in which at least part of the path has some allowance for variation.
+   4. E.g. robotic painting, wielding, machining, sanding
+** The Talk
+   Today I'm going to talk about a ROS libray called Descartes, a planning library for semi-constrained cartesian trajectories.
+   Firstly I should confess I stole these slides from Shuan Edwards, who gave a great talk about this topic at ROScon2015.
+   There's video of this talk at YouTube. Those who want to know more about this should really go to watch this video.
+   I'm going to just briefly introduce you the problem and how they solve it, so that hopefully I don't waste much of your time hearing this talk while there's
+a abviously better one online. 
+
+   First, the application need.
+   A semi-constrained trajectory, in short, is a trajectory that requires less DOF than what the arm provides. But what does that really means.
+   In ROS community, MoveIt! is a great software, very popular. What it does is planning for typical pick&place applications, where you specify a start pose to pick
+up something and then a goal pose to place it and then it plans a point-to-point free space motion.
+   But that's not always the case. There're cases where not only the start and goal pose matter, but also the path in between.
+   In our manipulation code base, the cartesian interpolation funcitonaliy can be used for planning for arm to strictly follow a straight line in Cartesian space.
+   It's very useful if that's what you're asking for.
+   However, many industrail applications in the real world fall between the two ends of the spectrum. You want to have some controll over the path, but not a full control.
+   An example would be robotic machining. This task requires the tip of the tool to travel through a specified contour to cut out some material of the workpiece.
+   Usually you wouldn't care about the roll angle of the tip, because it's some sort of spinning drill.
+   This is what called a semi-constraint trajectory. At least some part of it allows some tolerance of variation.
+   And if you can utilize this variation, it really opens up the space for planning and optimization.
+   
+   Before this work, common solutions usually involve some sort of arbitrary assignment of 6DOF poses, or the value of the redundant axes.
+   Again, the robotic machining example, you probably assign the roll angle to be some value.
+   But this heavy depends on human intuition. And it always results in unnecessary workspace reduciton.
+** My Questions
+   - What's the purpose of IDGenerator<> template -> IDGenerator<u64_t> specializaiton -> TrajectoryID factory class?
+   - Directed Acyclic Graph search for Ladder Graph, rung
+
+** Reference
+   - [[http://wiki.ros.org/descartes][Descartes at ROS.org]]
+   - [[https://roscon.ros.org/2015/presentations/ROSCon_Descartes.pdf][Slides from Shuan Edward's talk at ROScon 2015]]
+   - [[https://ros-industrial.github.io/industrial_training/_downloads/ROS-I%20Basic%20Developers%20Training%20-%20Session%204.pdf][Slides from SWRI for ROS Industrial Basic Developer’s Training Class]]
+   - [[https://ros-industrial.github.io/industrial_training/_source/session4/Descartes-Path-Planning.html][Introduction Exercise for to Descartes Path Planning]]
+     
